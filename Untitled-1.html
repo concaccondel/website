@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Discordtik</title>
+    <style>
+        body {
+            background-color: lightblue;
+            text-align: center;
+            padding-top: 50px;
+            font-family: Arial, sans-serif;
+        }
+        #video-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .video-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        video {
+            width: 320px;
+            height: 240px;
+        }
+        #progress-bar {
+            width: 50%;
+            height: 20px;
+            background-color: #f3f3f3;
+            margin: 20px auto;
+            border-radius: 5px;
+        }
+        #progress {
+            height: 100%;
+            width: 0;
+            background-color: #4caf50;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Video hay và bổ ích!</h1>
+    <h2>Made by March April</h2>
+    <h3>KHÔNG ĐƯỢC GỬI FILE QUÁ 1GB</h3>
+    <h4>WEB in BETA TEST – nếu phát hiện lỗi, vui lòng DM: aviationguyboeing_747 (Discord)</h4>
+
+    <!-- Upload -->
+    <form method="POST" enctype="multipart/form-data" id="upload-container" action="/">
+        <input type="file" name="file" accept="video/mp4" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <!-- Progress bar -->
+    <div id="progress-bar">
+        <div id="progress">0%</div>
+    </div>
+
+    <!-- Video list -->
+    <div id="video-container">
+        <!-- Bạn có thể thêm thủ công các video như sau -->
+        <div class="video-item">
+            <video controls>
+                <source src="static/video1.mp4" type="video/mp4">
+                Trình duyệt của bạn không hỗ trợ phát video.
+            </video>
+            <h3>06 Quen lắm - Ngọt - Topic</h3>
+        </div>
+        <div class="video-item">
+            <video controls>
+                <source src="static/video2.mp4" type="video/mp4">
+            </video>
+            <h3>Tạm Biệt Nhé</h3>
+        </div>
+        <!-- ... bạn có thể thêm tiếp các video khác như vậy -->
+    </div>
+
+    <script>
+        const form = document.getElementById('upload-container');
+        const progressBar = document.getElementById('progress');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const fileInput = document.querySelector('input[type="file"]');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '/', true);
+
+                xhr.upload.onprogress = function(event) {
+                    if (event.lengthComputable) {
+                        const percentComplete = (event.loaded / event.total) * 100;
+                        progressBar.style.width = percentComplete + '%';
+                        progressBar.innerHTML = Math.round(percentComplete) + '%';
+                    }
+                };
+
+                xhr.onload = function() {
+                    if (xhr.status == 200) {
+                        alert('Upload hoàn tất!');
+                        location.reload();
+                    } else {
+                        alert('Upload thất bại!');
+                    }
+                };
+
+                const formData = new FormData();
+                formData.append('file', file);
+                xhr.send(formData);
+            }
+        });
+    </script>
+</body>
+</html>
